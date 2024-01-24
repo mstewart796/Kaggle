@@ -6,7 +6,7 @@ import pandas as pd
 # Importing the dataset
 dataset = pd.read_csv('titanic_train.csv')
 X = dataset.iloc[:, [2, 4, 5]].values
-y = dataset.iloc[:, [1]].values
+y = dataset.iloc[:, 1].values
 
 df_test = pd.read_csv('titanic_test.csv')
 X_test = df_test.iloc[:, [1, 3, 4]].values
