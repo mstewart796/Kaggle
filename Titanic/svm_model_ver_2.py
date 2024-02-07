@@ -23,13 +23,10 @@ X_test[:, [2, 5]] = imputer.transform(X_test[:, [2, 5]])
 
 # Encoding categorical data
 # Encoding the Independent Variable
-from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import OneHotEncoder
-ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [1])], remainder='passthrough')
-X = np.array(ct.fit_transform(X))
-
-ct_test = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [1])], remainder='passthrough')
-X_test = np.array(ct_test.fit_transform(X_test))
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+X[:, 1] = le.fit_transform(X[:, 1])
+X_test[:, 1] = le.fit_transform(X_test[:, 1])
 
 # Training the SVM model on the Training set
 from sklearn.svm import SVC
