@@ -28,6 +28,7 @@ le = LabelEncoder()
 X[:, 1] = le.fit_transform(X[:, 1])
 X_test[:, 1] = le.fit_transform(X_test[:, 1])
 
+# Split into training and validation sets
 from sklearn.model_selection import train_test_split
 X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size = 0.2, random_state = 0)
 
@@ -46,12 +47,11 @@ y_flattened = y_train.ravel()
 classifier = SVC(kernel = 'rbf', random_state = 0)
 classifier.fit(X_train, y_flattened)
 
-# Predicting the Test set results
+# Predicting the Validation set results
 y_pred = classifier.predict(X_valid)
 
 # Checking accuracy
-# train_accuracy = classifier.score(X, y)
-# print(f'Training Accuracy: {train_accuracy}')
+
 from sklearn.metrics import confusion_matrix, accuracy_score
 y_pred = classifier.predict(X_valid)
 cm = confusion_matrix(y_valid, y_pred)
