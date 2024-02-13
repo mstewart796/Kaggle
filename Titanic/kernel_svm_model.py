@@ -28,18 +28,32 @@ le = LabelEncoder()
 X[:, 1] = le.fit_transform(X[:, 1])
 X_test[:, 1] = le.fit_transform(X_test[:, 1])
 
+from sklearn.model_selection import train_test_split
+X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+# Feature Scaling
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_valid = sc.transform(X_valid)
+
 # Training the Kernel SVM model on the Training set
 from sklearn.svm import SVC
 # Flatten the 'y' array using ravel()
-y_flattened = y.ravel()
+y_flattened = y_train.ravel()
 
-# Create and train the DecisionTreeClassifier
+# Create and train the SVM Classifier
 classifier = SVC(kernel = 'rbf', random_state = 0)
-classifier.fit(X, y_flattened)
+classifier.fit(X_train, y_flattened)
 
 # Predicting the Test set results
-y_pred = classifier.predict(X_test)
+y_pred = classifier.predict(X_valid)
 
 # Checking accuracy
-train_accuracy = classifier.score(X, y)
-print(f'Training Accuracy: {train_accuracy}')
+# train_accuracy = classifier.score(X, y)
+# print(f'Training Accuracy: {train_accuracy}')
+from sklearn.metrics import confusion_matrix, accuracy_score
+y_pred = classifier.predict(X_valid)
+cm = confusion_matrix(y_valid, y_pred)
+print(cm)
+print(accuracy_score(y_valid, y_pred))
