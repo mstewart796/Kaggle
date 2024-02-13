@@ -28,24 +28,29 @@ le = LabelEncoder()
 X[:, 1] = le.fit_transform(X[:, 1])
 X_test[:, 1] = le.fit_transform(X_test[:, 1])
 
+# Split into training and validation sets
+from sklearn.model_selection import train_test_split
+X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
 # Feature Scaling
 from sklearn.preprocessing import StandardScaler
 sc = StandardScaler()
-X = sc.fit_transform(X)
-X_test = sc.transform(X_test)
+X_train = sc.fit_transform(X_train)
+X_valid = sc.transform(X_valid)
 
 # Training the K-NN model on the Training set
 from sklearn.neighbors import KNeighborsClassifier
 # Flatten the 'y' array using ravel()
-y_flattened = y.ravel()
+y_flattened = y_train.ravel()
 
-# Create and train the DecisionTreeClassifier
+# Create and train the KNeighborsClassifier
 classifier = KNeighborsClassifier(n_neighbors = 5, metric = 'minkowski', p = 2)
-classifier.fit(X, y_flattened)
-
-# Predicting the Test set results
-y_pred = classifier.predict(X_test)
+classifier.fit(X_train, y_flattened)
 
 # Checking accuracy
-train_accuracy = classifier.score(X, y)
-print(f'Training Accuracy: {train_accuracy}')
+
+from sklearn.metrics import confusion_matrix, accuracy_score
+y_pred = classifier.predict(X_valid)
+cm = confusion_matrix(y_valid, y_pred)
+print(cm)
+print(accuracy_score(y_valid, y_pred))
