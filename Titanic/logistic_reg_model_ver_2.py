@@ -47,9 +47,6 @@ y_flattened = y_train.ravel()
 classifier = LogisticRegression(max_iter=1000)
 classifier.fit(X_train, y_flattened)
 
-# Predicting the Validation set results
-y_pred = classifier.predict(X_valid)
-
 # Checking accuracy
 
 from sklearn.metrics import confusion_matrix, accuracy_score
