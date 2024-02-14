@@ -48,9 +48,39 @@ classifier = SVC(kernel = 'rbf', random_state = 0)
 classifier.fit(X_train, y_flattened)
 
 # Checking accuracy
-
 from sklearn.metrics import confusion_matrix, accuracy_score
 y_pred = classifier.predict(X_valid)
 cm = confusion_matrix(y_valid, y_pred)
 print(cm)
 print(accuracy_score(y_valid, y_pred))
+
+# Applying k-Fold Cross Validation
+from sklearn.model_selection import cross_val_score
+accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10)
+print("Accuracy: {:.2f} %".format(accuracies.mean()*100))
+print("Standard Deviation: {:.2f} %".format(accuracies.std()*100))
+
+# Applying Grid Search to find the best model and the best parameters
+from sklearn.model_selection import GridSearchCV
+parameters = [{'C': [0.25, 0.5, 0.75, 1], 'kernel': ['linear']},
+              {'C': [0.25, 0.5, 0.75, 1], 'kernel': ['rbf'], 'gamma': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]}]
+grid_search = GridSearchCV(estimator = classifier,
+                           param_grid = parameters,
+                           scoring = 'accuracy',
+                           cv = 10,
+                           n_jobs = -1)
+grid_search.fit(X_train, y_train)
+best_accuracy = grid_search.best_score_
+best_parameters = grid_search.best_params_
+print("Best Accuracy: {:.2f} %".format(best_accuracy*100))
+print("Best Parameters:", best_parameters)
+
+# Applying best parameters
+classifier = SVC(C = 1, gamma = 0.1, kernel = 'rbf')
+classifier.fit(X_train, y_flattened)
+
+# Checking accuracy again
+y_pred = classifier.predict(X_valid)
+cm = confusion_matrix(y_valid, y_pred)
+print(cm)
+accuracy_score(y_valid, y_pred)
