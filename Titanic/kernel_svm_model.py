@@ -56,7 +56,7 @@ print(accuracy_score(y_valid, y_pred))
 
 # Applying k-Fold Cross Validation
 from sklearn.model_selection import cross_val_score
-accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10)
+accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_flattened, cv = 10)
 print("Accuracy: {:.2f} %".format(accuracies.mean()*100))
 print("Standard Deviation: {:.2f} %".format(accuracies.std()*100))
 
@@ -69,7 +69,7 @@ grid_search = GridSearchCV(estimator = classifier,
                            scoring = 'accuracy',
                            cv = 10,
                            n_jobs = -1)
-grid_search.fit(X_train, y_train)
+grid_search.fit(X_train, y_flattened)
 best_accuracy = grid_search.best_score_
 best_parameters = grid_search.best_params_
 print("Best Accuracy: {:.2f} %".format(best_accuracy*100))
