@@ -76,11 +76,11 @@ print("Best Accuracy: {:.2f} %".format(best_accuracy*100))
 print("Best Parameters:", best_parameters)
 
 # Applying best parameters
-classifier = SVC(C = 1, gamma = 0.1, kernel = 'rbf')
+classifier = SVC(C = 0.5, gamma = 0.4, kernel = 'rbf')
 classifier.fit(X_train, y_flattened)
 
 # Checking accuracy again
 y_pred = classifier.predict(X_valid)
 cm = confusion_matrix(y_valid, y_pred)
 print(cm)
-accuracy_score(y_valid, y_pred)
+print(accuracy_score(y_valid, y_pred))
